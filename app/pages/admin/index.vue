@@ -4,6 +4,7 @@
 
 <script setup>
 definePageMeta({
+  middleware: ["sanctum:auth"],
   layout: "admin",
 });
 </script>

@@ -16,27 +16,9 @@ const items = ref<NavigationMenuItem[][]>([
       class: "p-3",
     },
     {
-      label: "Komentar",
-      icon: "i-lucide-message-square-more",
-      to: "/admin/comments",
-      class: "p-3",
-    },
-    {
       label: "Pengumuman",
       icon: "i-lucide-megaphone",
       to: "/admin/announcements",
-      class: "p-3",
-    },
-    {
-      label: "Instansi",
-      icon: "i-lucide-building-2",
-      to: "/admin/departments",
-      class: "p-3",
-    },
-    {
-      label: "Aplikasi",
-      icon: "i-lucide-app-window",
-      to: "/admin/apps",
       class: "p-3",
     },
     {
@@ -58,11 +40,31 @@ const items = ref<NavigationMenuItem[][]>([
       class: "p-3",
     },
     {
-      label: "Tags",
-      icon: "i-lucide-tags",
-      to: "/admin/tags",
+      label: "Komentar",
+      icon: "i-lucide-message-square-more",
+      to: "/admin/comments",
       class: "p-3",
     },
+  ],
+  [
+    {
+      label: "Instansi",
+      icon: "i-lucide-building-2",
+      to: "/admin/departments",
+      class: "p-3",
+    },
+    {
+      label: "Aplikasi",
+      icon: "i-lucide-app-window",
+      to: "/admin/apps",
+      class: "p-3",
+    },
+    // {
+    //   label: "Tags",
+    //   icon: "i-lucide-tags",
+    //   to: "/admin/tags",
+    //   class: "p-3",
+    // },
     {
       label: "Pengguna",
       icon: "i-lucide-shield-user",

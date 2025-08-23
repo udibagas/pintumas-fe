@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
-  modules: ["@nuxt/content", "@nuxt/image", "@nuxt/ui", "nuxt-fortify"],
+  modules: ["@nuxt/content", "@nuxt/image", "@nuxt/ui", "nuxt-auth-sanctum"],
 
   css: ["~/assets/css/main.css"],
 
@@ -12,17 +12,12 @@ export default defineNuxtConfig({
     },
   },
 
-  nuxtFortify: {
-    baseUrl: "http://localhost:8000",
-    origin: "http://localhost:3000",
-    authMode: "cookie",
-    authHome: "/dashboard",
-    features: {
-      registration: true,
-      resetPasswords: true,
-    },
+  ui: {},
+
+  sanctum: {
+    baseUrl: "http://localhost:8000", // Laravel API
     endpoints: {
-      // user: "/api/user",
+      user: "/api/me",
     },
   },
 });

@@ -6,17 +6,17 @@
         <UAvatar size="lg" alt="Admin" />
       </UDropdownMenu>
       <div>
-        <div>Administrator (Admin)</div>
-        <div class="text-sm">admin@mail.com</div>
+        <div>{{ user?.name }} ({{ user?.role }})</div>
+        <div class="text-sm">{{ user?.email }}</div>
       </div>
     </div>
   </header>
 
   <section class="flex">
-    <aside class="bg-gray-50 w-[260px] h-[calc(100vh-60px)] p-8">
+    <aside class="w-[260px] h-[calc(100vh-60px)] p-8">
       <AdminMenu />
     </aside>
-    <main class="flex-1 bg-blue-50 p-8">
+    <main class="flex-1 p-8">
       <slot />
     </main>
   </section>
@@ -24,6 +24,8 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem } from "@nuxt/ui";
+const { logout } = useSanctumAuth();
+const user = useSanctumUser<{ name: string; email: string; role: string }>();
 
 const items = ref<DropdownMenuItem[][]>([
   [
@@ -44,7 +46,10 @@ const items = ref<DropdownMenuItem[][]>([
     {
       label: "Logout",
       icon: "i-lucide-log-out",
-      // kbds: ["shift", "meta", "q"],
+      kbds: ["shift", "meta", "q"],
+      onSelect: async (e) => {
+        await logout();
+      },
     },
   ],
 ]);

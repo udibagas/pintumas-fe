@@ -52,7 +52,7 @@ const items = ref<NavigationMenuItem[][]>([
       class: "p-3",
     },
     {
-      label: "Supply Chain",
+      label: "Supply Chains",
       icon: "i-lucide-link-2",
       to: "/admin/supply-chains",
       class: "p-3",
@@ -64,7 +64,7 @@ const items = ref<NavigationMenuItem[][]>([
       class: "p-3",
     },
     {
-      label: "User",
+      label: "Pengguna",
       icon: "i-lucide-shield-user",
       to: "/admin/users",
       class: "p-3",

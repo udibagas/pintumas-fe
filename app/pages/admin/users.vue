@@ -24,7 +24,7 @@
       icon="i-lucide-plus"
       color="warning"
       variant="solid"
-      @click="createUser"
+      @click="openForm({} as User)"
       class="min-w-48"
     >
       Tambah Pengguna
@@ -90,28 +90,23 @@
   <lazy-confirm-dialog
     :show="showDeleteDialog"
     title="Hapus Pengguna"
-    :message="`Apakah anda yakin ingin menghapus pengguna '${selectedUser?.name}'?`"
-    @ok="handleDelete(selectedUser?.id)"
+    :message="`Apakah anda yakin ingin menghapus pengguna '${formState?.name}'?`"
+    @ok="remove(formState?.id!)"
     @cancel="() => (showDeleteDialog = false)"
   />
 
   <lazy-user-form
     :show="showForm"
-    :data="selectedUser"
+    :form-state="formState"
     @close="showForm = false"
     @submit="handleFormSubmit"
-    :description="selectedUser ? 'Edit Pengguna' : 'Tambah Pengguna'"
+    :description="formState ? 'Edit Pengguna' : 'Tambah Pengguna'"
     :errors="errors"
   />
 </template>
 
 <script setup lang="ts">
-import { UInput } from "#components";
 import type { DropdownMenuItem, TableColumn } from "@nuxt/ui";
-import type { PaginatedData } from "~/types";
-
-const toast = useToast();
-const { $api } = useNuxtApp();
 
 type User = {
   id: number;
@@ -133,80 +128,24 @@ const columns: TableColumn<User>[] = [
   { id: "action" },
 ];
 
-const page = ref(1);
-const pageSize = ref(10);
-const filter = reactive({
-  role: undefined,
-  search: "",
-});
-const errors = ref<Record<string, string[]>>({});
+const {
+  // table related
+  data,
+  page,
+  pageSize,
+  filter,
+  handlePageUpdate,
+  showDeleteDialog,
+  openDeleteDialog,
 
-const showDeleteDialog = ref(false);
-const selectedUser = ref<User | null>(null);
-const showForm = ref(false);
-
-const { data, refresh } = useApi<PaginatedData<User>>("/api/user", {
-  query: computed(() => ({
-    page: page.value,
-    pageSize: pageSize.value,
-    ...filter,
-  })),
-});
-
-function handlePageUpdate(p: number) {
-  page.value = p;
-}
-
-function createUser() {
-  selectedUser.value = null;
-  showForm.value = true;
-}
-
-async function handleFormSubmit(form: User) {
-  console.log(form);
-  try {
-    await $api("/api/user", {
-      method: "POST",
-      body: form,
-    });
-  } catch (err: any) {
-    if (err.response?.status === 422) {
-      errors.value = err.response?._data?.errors || {};
-    }
-  } finally {
-    showForm.value = false;
-    errors.value = {};
-    refresh();
-  }
-}
-
-function openDeleteDialog(user: User) {
-  selectedUser.value = user;
-  showDeleteDialog.value = true;
-}
-
-async function handleDelete(id?: number) {
-  if (!id) return;
-  showDeleteDialog.value = false;
-  try {
-    await $api(`/api/user/${id}`, { method: "DELETE" });
-    toast.add({
-      title: "Sukses",
-      description: "Berhasil menghapus pengguna",
-      color: "success",
-      icon: "i-lucide-check-circle",
-    });
-  } catch (error: any) {
-    toast.add({
-      title: "Error",
-      description: error.response?._data?.message,
-      color: "error",
-      icon: "i-lucide-x-circle",
-    });
-  }
-
-  refresh();
-}
+  // form related
+  formState,
+  errors,
+  showForm,
+  remove,
+  openForm,
+  handleFormSubmit,
+} = useCrud<User>("/api/user");
 
 function getDropdownActions(user: User): DropdownMenuItem[][] {
   return [
@@ -215,7 +154,7 @@ function getDropdownActions(user: User): DropdownMenuItem[][] {
         label: "Edit",
         icon: "i-lucide-edit",
         onSelect: () => {
-          console.log(user);
+          openForm(user);
         },
       },
       {

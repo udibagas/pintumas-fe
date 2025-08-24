@@ -84,7 +84,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
+const { formState } = defineProps({
   show: {
     type: Boolean,
     default: false,
@@ -97,15 +97,8 @@ const props = defineProps({
     type: String,
     default: "Tambah Pengguna Baru",
   },
-  data: {
-    type: Object as () => {
-      id?: number;
-      name?: string;
-      email?: string;
-      role?: string;
-      password?: string;
-      password_confirmation?: string;
-    } | null,
+  formState: {
+    type: Object as () => Record<string, any>,
     default: () => ({}),
   },
   errors: {
@@ -115,13 +108,4 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["submit", "close"]);
-
-const formState = reactive({
-  id: props.data?.id,
-  name: props.data?.name,
-  email: props.data?.email,
-  role: props.data?.role,
-  password: props.data?.password,
-  password_confirmation: props.data?.password_confirmation,
-});
 </script>

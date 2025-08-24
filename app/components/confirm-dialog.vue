@@ -15,8 +15,14 @@
           variant="outline"
           label="Tidak"
           @click="emit('cancel', true)"
+          icon="i-lucide-x-circle"
         />
-        <u-button color="error" label="Ya" @click="emit('ok', false)" />
+        <u-button
+          color="error"
+          label="Ya"
+          @click="emit('ok', false)"
+          icon="i-lucide-check-circle"
+        />
       </div>
     </template>
   </u-modal>

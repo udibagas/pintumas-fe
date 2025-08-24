@@ -101,8 +101,8 @@ import { UInput } from "#components";
 import type { DropdownMenuItem, TableColumn } from "@nuxt/ui";
 import type { PaginatedData } from "~/types";
 
-const { $api } = useNuxtApp();
 const toast = useToast();
+const { $api } = useNuxtApp();
 
 type User = {
   id: number;
@@ -134,11 +134,11 @@ const filter = reactive({
 const showDeleteDialog = ref(false);
 const selectedUser = ref<User | null>(null);
 
-const { data, refresh } = await useApi<PaginatedData<User>>(`/api/user`, {
+const { data, refresh } = useApi<PaginatedData<User>>("/api/user", {
   query: computed(() => ({
     page: page.value,
-    ...filter,
     pageSize: pageSize.value,
+    ...filter,
   })),
 });
 
@@ -164,14 +164,15 @@ async function handleDelete(id?: number) {
       color: "success",
       icon: "i-lucide-check-circle",
     });
-  } catch (error) {
+  } catch (error: any) {
     toast.add({
       title: "Error",
-      description: "Gagal menghapus pengguna",
+      description: error.response?._data?.message,
       color: "error",
       icon: "i-lucide-x-circle",
     });
   }
+
   refresh();
 }
 
@@ -186,7 +187,7 @@ function getDropdownActions(user: User): DropdownMenuItem[][] {
         },
       },
       {
-        label: "Delete",
+        label: "Hapus",
         icon: "i-lucide-trash",
         color: "error",
         onSelect: () => {

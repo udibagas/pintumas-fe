@@ -38,7 +38,7 @@ const items = ref<DropdownMenuItem[][]>([
   [
     {
       label: "Profil",
-      icon: "i-lucide-user",
+      icon: "i-lucide-circle-user-round",
       to: "/admin/profile",
     },
   ],

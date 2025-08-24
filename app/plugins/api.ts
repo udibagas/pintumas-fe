@@ -1,12 +1,5 @@
-export default defineNuxtPlugin((nuxtApp) => {
-  const api = $fetch.create({
-    baseURL: "http://localhost:8000",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    credentials: "include",
-  });
+export default defineNuxtPlugin(async (nuxtApp) => {
+  const api = useSanctumClient();
 
   // Expose to useNuxtApp().$api
   return {

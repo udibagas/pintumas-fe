@@ -49,43 +49,16 @@
     </template>
   </UTable>
 
-  <div class="flex flex-wrap gap-4 mt-6 items-center justify-between">
-    <div class="flex flex-wrap gap-2">
-      <u-select
-        v-model="pageSize"
-        size="sm"
-        :items="[10, 25, 50, 100]"
-        class="min-w-16"
-      />
-
-      <UPagination
-        size="sm"
-        active-color="warning"
-        :page="data?.current_page ?? 1"
-        :items-per-page="data?.per_page ?? 10"
-        :total="data?.total ?? 0"
-        @update:page="(page) => handlePageUpdate(page)"
-      />
-    </div>
-
-    <div>
-      Halaman
-      <u-input
-        v-model="page"
-        type="number"
-        size="sm"
-        min="1"
-        class="mx-2 min-w-16"
-        :max="data?.last_page ?? 1"
-      />
-      dari {{ data?.last_page ?? 1 }}
-    </div>
-
-    <div>
-      Menampilkan {{ data?.from ?? 0 }} - {{ data?.to ?? 0 }} dari
-      {{ data?.total ?? 0 }} data
-    </div>
-  </div>
+  <Pagination
+    :page="page"
+    :page-size="pageSize"
+    :last-page="data?.last_page ?? 0"
+    :from="data?.from ?? 0"
+    :to="data?.to ?? 0"
+    :total="data?.total ?? 0"
+    @update:page="handlePageUpdate"
+    @update:pageSize="(size) => (pageSize = size)"
+  />
 
   <lazy-confirm-dialog
     :show="showDeleteDialog"

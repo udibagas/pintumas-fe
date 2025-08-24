@@ -94,6 +94,14 @@
     @ok="handleDelete(selectedUser?.id)"
     @cancel="() => (showDeleteDialog = false)"
   />
+
+  <lazy-user-form
+    :show="showForm"
+    :data="selectedUser"
+    @close="showForm = false"
+    @submit="handleFormSubmit"
+    :description="selectedUser ? 'Edit Pengguna' : 'Tambah Pengguna'"
+  />
 </template>
 
 <script setup lang="ts">
@@ -133,6 +141,7 @@ const filter = reactive({
 
 const showDeleteDialog = ref(false);
 const selectedUser = ref<User | null>(null);
+const showForm = ref(false);
 
 const { data, refresh } = useApi<PaginatedData<User>>("/api/user", {
   query: computed(() => ({
@@ -146,7 +155,14 @@ function handlePageUpdate(p: number) {
   page.value = p;
 }
 
-function createUser() {}
+function createUser() {
+  selectedUser.value = null;
+  showForm.value = true;
+}
+
+function handleFormSubmit(form: User) {
+  console.log(form);
+}
 
 function openDeleteDialog(user: User) {
   selectedUser.value = user;

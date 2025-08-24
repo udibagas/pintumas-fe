@@ -101,6 +101,7 @@
     @close="showForm = false"
     @submit="handleFormSubmit"
     :description="selectedUser ? 'Edit Pengguna' : 'Tambah Pengguna'"
+    :errors="errors"
   />
 </template>
 
@@ -138,6 +139,7 @@ const filter = reactive({
   role: undefined,
   search: "",
 });
+const errors = ref<Record<string, string[]>>({});
 
 const showDeleteDialog = ref(false);
 const selectedUser = ref<User | null>(null);
@@ -160,8 +162,22 @@ function createUser() {
   showForm.value = true;
 }
 
-function handleFormSubmit(form: User) {
+async function handleFormSubmit(form: User) {
   console.log(form);
+  try {
+    await $api("/api/user", {
+      method: "POST",
+      body: form,
+    });
+  } catch (err: any) {
+    if (err.response?.status === 422) {
+      errors.value = err.response?._data?.errors || {};
+    }
+  } finally {
+    showForm.value = false;
+    errors.value = {};
+    refresh();
+  }
 }
 
 function openDeleteDialog(user: User) {

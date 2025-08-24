@@ -2,6 +2,7 @@
   <u-modal
     :open="show"
     :title="title"
+    :errors="errors"
     :description="description"
     :close="{ onClick: () => emit('close') }"
     class="w-[400px]"
@@ -13,14 +14,15 @@
         id="user-form"
         @submit.prevent="emit('submit', formState)"
       >
-        <u-form-field label="Nama Pengguna">
+        <u-form-field label="Nama Pengguna" :error="errors.name?.join(',')">
           <u-input
             v-model="formState.name"
             placeholder="Nama Pengguna"
             class="w-full"
           />
         </u-form-field>
-        <u-form-field label="Alamat Email">
+
+        <u-form-field label="Alamat Email" :error="errors.email?.join(',')">
           <u-input
             v-model="formState.email"
             placeholder="Alamat Email"
@@ -28,8 +30,18 @@
           />
         </u-form-field>
 
-        <u-form-field label="Kata Sandi">
+        <u-form-field label="Role" :error="errors.role?.join(',')">
+          <u-select
+            v-model="formState.role"
+            :items="['ADMIN', 'EDITOR', 'USER']"
+            placeholder="Pilih Role"
+            class="w-full"
+          ></u-select>
+        </u-form-field>
+
+        <u-form-field label="Kata Sandi" :error="errors.password?.join(',')">
           <u-input
+            type="password"
             v-model="formState.password"
             placeholder="Kata Sandi"
             class="w-full"
@@ -38,6 +50,7 @@
 
         <u-form-field label="Ulangi Kata Sandi">
           <u-input
+            type="password"
             v-model="formState.password_confirmation"
             placeholder="Ulangi Kata Sandi"
             class="w-full"
@@ -93,6 +106,10 @@ const props = defineProps({
       password?: string;
       password_confirmation?: string;
     } | null,
+    default: () => ({}),
+  },
+  errors: {
+    type: Object as () => Record<string, string[]>,
     default: () => ({}),
   },
 });
